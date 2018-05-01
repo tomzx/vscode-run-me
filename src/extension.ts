@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 			items.push(command.description);
 		}
 
-		vscode.window.showQuickPick(items).then((value: string|undefined) => {
+		vscode.window.showQuickPick(items).then((value?: string) => {
 			if (!value) {
 				return;
 			}
@@ -72,7 +72,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 				const instantiateQuestion = (step: IFormConfiguration): any => {
 					console.log('Displaying question', step.question);
-					return askQuestion(step).then((value: string | undefined) => {
+					return askQuestion(step).then((value?: string) => {
 						console.log(step.question);
 						console.log(value);
 						if (!value) {
