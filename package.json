@@ -77,7 +77,7 @@
 											},
 											"default": {
 												"type": "string",
-												"description": "The default value to put/pick."
+												"description": "The default value to put in the field. Only for text inputs."
 											},
 											"options": {
 												"type": "array",

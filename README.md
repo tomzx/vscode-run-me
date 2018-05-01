@@ -27,7 +27,6 @@ Create and customize commands to be executed by answering a few questions.
 					{
 						"variable": "$var2",
 						"question": "What about $var2?",
-						"default": "Hello world!",
 						"options": [
 							"Good day!",
 							"Good evening!",
