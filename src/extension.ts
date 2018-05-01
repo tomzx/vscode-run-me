@@ -59,7 +59,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 				const askQuestion = (step: IFormConfiguration) => {
 					if (step.options) {
-						return vscode.window.showQuickPick([]);
+						return vscode.window.showQuickPick(step.options, {
+							placeHolder: step.question,
+						});
 					} else {
 						return vscode.window.showInputBox({
 							prompt: step.question,
