@@ -25,7 +25,10 @@ export function activate(context: vscode.ExtensionContext) {
 			items.push(command.description);
 		}
 
-		vscode.window.showQuickPick(items).then((value?: string) => {
+		vscode.window.showQuickPick(items, {
+			placeHolder: 'Which command do you want to run?',
+			ignoreFocusOut: true,
+		}).then((value?: string) => {
 			if (!value) {
 				return;
 			}
@@ -61,11 +64,13 @@ export function activate(context: vscode.ExtensionContext) {
 					if (step.options) {
 						return vscode.window.showQuickPick(step.options, {
 							placeHolder: step.question,
+							ignoreFocusOut: true,
 						});
 					} else {
 						return vscode.window.showInputBox({
 							prompt: step.question,
 							value: step.default,
+							ignoreFocusOut: true,
 						});
 					}
 				};
