@@ -8,6 +8,7 @@ Create and customize commands to be executed by answering a few questions.
 4. Your list of commands will appear, you can then select the one to execute.
 5. If your command has a form, the questions will be displayed.
 6. The command will be executed.
+7. You can bind a keyboard shortcut to the command. You can find it under `run-me.$your_command_identifier$`.
 
 ## Configuration
 ```json
@@ -15,6 +16,7 @@ Create and customize commands to be executed by answering a few questions.
 	"run-me": {
 		"commands": [
 			{
+				"identifier": "test",
 				"description": "Test",
 				"command": "echo $var1 $var2",
 				"working_directory": "/tmp",

@@ -1,97 +1,104 @@
 {
-  "name": "run-me",
-  "displayName": "Run Me",
-  "description": "Configurable shell command runner",
-  "version": "0.1.0",
-  "publisher": "tomzx",
-  "bugs": {
-    "url": "https://github.com/tomzx/vscode-run-me/issues"
-  },
-  "homepage": "https://github.com/tomzx/vscode-run-me/blob/master/README.md",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tomzx/vscode-run-me.git"
-  },
-  "license": "MIT",
-  "engines": {
-    "vscode": "^1.22.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:run-me.run",
-    "onCommand:run-me.create"
-  ],
-  "main": "./out/extension",
-  "contributes": {
-    "commands": [
-      {
-        "category": "Run Me",
-        "command": "run-me.run",
-        "title": "Run"
-      },
-      {
-        "category": "Run Me",
-        "command": "run-me.create",
-        "title": "Create"
-      }
+	"name": "run-me",
+	"displayName": "Run Me",
+	"description": "Configurable shell command runner",
+	"version": "0.2.0",
+	"publisher": "tomzx",
+	"bugs": {
+		"url": "https://github.com/tomzx/vscode-run-me/issues"
+	},
+	"homepage": "https://github.com/tomzx/vscode-run-me/blob/master/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tomzx/vscode-run-me.git"
+	},
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.22.0"
+	},
+	"categories": [
+		"Other"
 	],
-	"configuration":{
-		"title": "Run Me commands configuration.",
-		"properties": {
-			"run-me": {
-				"type": "object",
-				"properties": {
-					"commands": {
-						"type": "array",
-						"description": "List of commands.",
-						"items": {
-							"type":"object",
-							"properties": {
-								"description": {
-									"type": "string",
-									"description": "Textual identifier of the command."
-								},
-								"command": {
-									"type": "string",
-									"description": "Command to execute (with variables)."
-								},
-								"working_directory": {
-									"type": "string",
-									"description": "The working directory in which to execute the script."
-								},
-								"form": {
-									"type": "array",
-									"description": "A list of questions to ask in order to obtain values for variables.",
-									"items": {
-										"type": "object",
-										"properties": {
-											"variable": {
-												"type": "string",
-												"description": "The variable name."
-											},
-											"question": {
-												"type": "string",
-												"description": "The question to ask the user."
-											},
-											"default": {
-												"type": "string",
-												"description": "The default value to put in the field. Only for text inputs."
-											},
-											"options": {
-												"type": "array",
-												"items": {
-													"type": "string"
+	"activationEvents": [
+		"*",
+		"onCommand:run-me.run",
+		"onCommand:run-me.create"
+	],
+	"main": "./out/extension",
+	"contributes": {
+		"commands": [
+			{
+				"category": "Run Me",
+				"command": "run-me.run",
+				"title": "Run"
+			},
+			{
+				"category": "Run Me",
+				"command": "run-me.create",
+				"title": "Create"
+			}
+		],
+		"configuration":{
+			"title": "Run Me commands configuration.",
+			"properties": {
+				"run-me": {
+					"type": "object",
+					"properties": {
+						"commands": {
+							"type": "array",
+							"description": "List of commands.",
+							"items": {
+								"type":"object",
+								"properties": {
+									"identifier": {
+										"type": "string",
+										"description": "Identifier used to do key binding. Use alphanumerical and hyphen/underscore only.",
+										"required": true
+									},
+									"description": {
+										"type": "string",
+										"description": "Description of the command."
+									},
+									"command": {
+										"type": "string",
+										"description": "Command to execute (with variables)."
+									},
+									"working_directory": {
+										"type": "string",
+										"description": "The working directory in which to execute the script."
+									},
+									"form": {
+										"type": "array",
+										"description": "A list of questions to ask in order to obtain values for variables.",
+										"items": {
+											"type": "object",
+											"properties": {
+												"variable": {
+													"type": "string",
+													"description": "The variable name."
+												},
+												"question": {
+													"type": "string",
+													"description": "The question to ask the user."
+												},
+												"default": {
+													"type": "string",
+													"description": "The default value to put in the field. Only for text inputs."
+												},
+												"options": {
+													"type": "array",
+													"items": {
+														"type": "string"
+													}
 												}
 											}
 										}
+									},
+									"show_in_console": {
+										"type": "boolean",
+										"description": "Whether the output of the command should be displayed in the console.",
+										"default": false
 									}
-								},
-								"show_in_console": {
-									"type": "boolean",
-									"description": "Whether the output of the command should be displayed in the console.",
-									"default": false
 								}
 							}
 						}
@@ -99,21 +106,20 @@
 				}
 			}
 		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test",
+		"package": "vsce package"
+	},
+	"devDependencies": {
+		"typescript": "^2.6.1",
+		"vscode": "^1.1.6",
+		"tslint": "^5.8.0",
+		"@types/node": "^7.0.43",
+		"@types/mocha": "^2.2.42"
 	}
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-	"test": "npm run compile && node ./node_modules/vscode/bin/test",
-	"package": "vsce package"
-  },
-  "devDependencies": {
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.6",
-    "tslint": "^5.8.0",
-    "@types/node": "^7.0.43",
-    "@types/mocha": "^2.2.42"
-  }
 }

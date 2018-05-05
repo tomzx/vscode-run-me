@@ -3,6 +3,7 @@ export interface IConfiguration {
 }
 
 export interface ICommandConfiguration {
+	identifier: string;
 	description: string;
 	command: string;
 	working_directory: string;
