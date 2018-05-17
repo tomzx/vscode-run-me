@@ -101,6 +101,10 @@
 									}
 								}
 							}
+						},
+						"variables": {
+							"type": "object",
+							"description": "Name => value mapping of variables available to all scripts."
 						}
 					}
 				}

@@ -1,5 +1,6 @@
 export interface IConfiguration {
 	commands: ICommandConfiguration[];
+	variables: IVariableConfiguration;
 }
 
 export interface ICommandConfiguration {
@@ -17,3 +18,5 @@ export interface IFormConfiguration {
 	default?: string;
 	options?: string[];
 }
+
+export type IVariableConfiguration = { [id: string]: string };

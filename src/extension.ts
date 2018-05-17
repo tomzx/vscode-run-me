@@ -8,7 +8,7 @@ import { strtr } from './strtr';
 export function activate(context: vscode.ExtensionContext) {
 	const outputChannel: vscode.OutputChannel = vscode.window.createOutputChannel('Run Me');
 
-	let registeredCommands: {[id: string]: vscode.Disposable} = {};
+	let registeredCommands: { [id: string]: vscode.Disposable } = {};
 	const registerCustomCommands = () => {
 		const configuration = vscode.workspace.getConfiguration().get<IConfiguration>('run-me');
 
@@ -49,17 +49,37 @@ export function activate(context: vscode.ExtensionContext) {
 		outputChannel.appendLine('Refresh done!');
 	});
 
+	const getVariables = () => {
+		const configuration = vscode.workspace.getConfiguration().get<IConfiguration>('run-me');
+
+		if (!configuration) {
+			return {};
+		}
+
+		// We do this because configuration.variables is a proxy to the data, so we can't use it as a dumb object
+		let variables: { [id: string]: string } = {};
+		for (let key in configuration.variables) {
+			variables[key] = configuration.variables[key];
+		}
+
+		return variables;
+	};
+
+	const resolveVariables = function(text: string, variables: { [id: string]: string }) {
+		return strtr(text, variables);
+	}
+
 	const executeCommand = (command: ICommandConfiguration) => {
 		const executeCommandInShell = () => {
 			let builtCommand = command.command;
 
-			builtCommand = strtr(builtCommand, variables);
+			builtCommand = resolveVariables(builtCommand, variables);
 
 			const options = {
-				cwd: command.working_directory,
+				cwd: command.working_directory ? resolveVariables(command.working_directory, variables) : undefined,
 			};
 
-			outputChannel.appendLine('Executing command: ' + builtCommand + ' in ' + command.working_directory);
+			outputChannel.appendLine('Executing command: ' + builtCommand + ' with options ' + JSON.stringify(options));
 
 			child_process.exec(builtCommand, options, (err, stdout, stderr) => {
 				if (err) {
@@ -71,7 +91,7 @@ export function activate(context: vscode.ExtensionContext) {
 			});
 		};
 
-		const variables: { [id: string]: string } = {};
+		const variables: { [id: string]: string } = getVariables();
 		const form = command.form;
 		if (form && form.length > 0) {
 			let currentStep = 0;

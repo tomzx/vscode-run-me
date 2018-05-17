@@ -19,7 +19,7 @@ Create and customize commands to be executed by answering a few questions.
 				"identifier": "test",
 				"description": "Test",
 				"command": "echo $var1 $var2",
-				"working_directory": "/tmp",
+				"working_directory": "$tmp",
 				"form": [
 					{
 						"variable": "$var1",
@@ -37,7 +37,10 @@ Create and customize commands to be executed by answering a few questions.
 					}
 				]
 			}
-		]
+		],
+		"variables": {
+			"$tmp": "/tmp"
+		}
 	}
 }
 ```
