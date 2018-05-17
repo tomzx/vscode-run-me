@@ -8,12 +8,19 @@ import { strtr } from './strtr';
 export function activate(context: vscode.ExtensionContext) {
 	const outputChannel: vscode.OutputChannel = vscode.window.createOutputChannel('Run Me');
 
+	let registeredCommands: {[id: string]: vscode.Disposable} = {};
 	const registerCustomCommands = () => {
 		const configuration = vscode.workspace.getConfiguration().get<IConfiguration>('run-me');
 
 		if (!configuration) {
 			return;
 		}
+
+		// Unregister commands
+		for (let key in registeredCommands) {
+			registeredCommands[key].dispose();
+		}
+		registeredCommands = {};
 
 		const commands: { [id: string]: boolean } = {};
 		for (const command of configuration.commands) {
@@ -27,11 +34,20 @@ export function activate(context: vscode.ExtensionContext) {
 
 			commands[command.identifier] = true;
 
-			vscode.commands.registerCommand('run-me.' + command.identifier, () => { console.log(command); executeCommand(command) });
+			registeredCommands[command.identifier] = vscode.commands.registerCommand('run-me.' + command.identifier, () => {
+				console.log(command);
+				executeCommand(command);
+			});
 		}
 	};
 
 	registerCustomCommands();
+
+	const onDidChangeConfiguration = vscode.workspace.onDidChangeConfiguration(() => {
+		outputChannel.appendLine('Configuration changed... Refreshing...');
+		registerCustomCommands();
+		outputChannel.appendLine('Refresh done!');
+	});
 
 	const executeCommand = (command: ICommandConfiguration) => {
 		const executeCommandInShell = () => {
@@ -42,6 +58,8 @@ export function activate(context: vscode.ExtensionContext) {
 			const options = {
 				cwd: command.working_directory,
 			};
+
+			outputChannel.appendLine('Executing command: ' + builtCommand + ' in ' + command.working_directory);
 
 			child_process.exec(builtCommand, options, (err, stdout, stderr) => {
 				if (err) {
@@ -136,8 +154,11 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Create');
 	});
 
-	context.subscriptions.push(runCommand);
-	context.subscriptions.push(createCommand);
+	context.subscriptions.push(
+		onDidChangeConfiguration,
+		runCommand,
+		createCommand
+	);
 }
 
 // this method is called when your extension is deactivated
