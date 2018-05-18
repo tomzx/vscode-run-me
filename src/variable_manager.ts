@@ -11,9 +11,10 @@ export class VariableManager {
 		}
 
 		// We do this because configuration.variables is a proxy to the data, so we can't use it as a dumb object
+		const configurationVariables = configuration.variables || {};
 		let variables: { [id: string]: string } = {};
-		for (let key in configuration.variables) {
-			variables[key] = configuration.variables[key];
+		for (let key in configurationVariables) {
+			variables[key] = configurationVariables[key];
 		}
 
 		return variables;

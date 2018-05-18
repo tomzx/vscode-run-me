@@ -17,11 +17,21 @@ export class CommandRunner {
 		const executeCommandInShell = () => {
 			let builtCommand = command.command;
 
+			if (!builtCommand) {
+				window.showErrorMessage('The executed command does not define a command to execute. Nothing will be executed.');
+				return;
+			}
+
 			builtCommand = this.variableManager.resolveVariables(builtCommand, variables);
 
 			const options = {
 				cwd: command.working_directory ? this.variableManager.resolveVariables(command.working_directory, variables) : undefined,
 			};
+
+			if (!builtCommand) {
+				window.showErrorMessage('The executed command produced an empty command string. Nothing will be executed.');
+				return;
+			}
 
 			this.outputChannel.appendLine('Executing command: ' + builtCommand + ' with options ' + JSON.stringify(options));
 
@@ -36,7 +46,7 @@ export class CommandRunner {
 		};
 
 		const variables: { [id: string]: string } = this.variableManager.getVariables();
-		const form = command.form;
+		const form = command.form || [];
 		if (form && form.length > 0) {
 			let currentStep = 0;
 			const firstStep = form[currentStep];
@@ -90,13 +100,15 @@ export class CommandRunner {
 			return;
 		}
 
+		const configurationCommands = configuration.commands || [];
 		const commands: { [id: string]: ICommandConfiguration } = {};
-		for (const command of configuration.commands) {
-			commands[command.description] = command;
-		}
-
 		const items: Array<string> = [];
-		for (const command of configuration.commands) {
+		for (const command of configurationCommands) {
+			if (!command.description) {
+				continue;
+			}
+
+			commands[command.description] = command;
 			items.push(command.description);
 		}
 

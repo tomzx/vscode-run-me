@@ -23,7 +23,8 @@ export class CommandManager {
 		}
 		this.registeredCommands = {};
 
-		for (const command of configuration.commands) {
+		const configurationCommands = configuration.commands || [];
+		for (const command of configurationCommands) {
 			if (!command.identifier) {
 				continue;
 			}
