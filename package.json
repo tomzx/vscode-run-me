@@ -2,7 +2,7 @@
 	"name": "run-me",
 	"displayName": "Run Me",
 	"description": "Configurable shell command runner",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"publisher": "tomzx",
 	"bugs": {
 		"url": "https://github.com/tomzx/vscode-run-me/issues"
