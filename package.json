@@ -57,11 +57,13 @@
 									},
 									"description": {
 										"type": "string",
-										"description": "Description of the command."
+										"description": "Description of the command.",
+										"required": true
 									},
 									"command": {
 										"type": "string",
-										"description": "Command to execute (with variables)."
+										"description": "Command to execute (with variables).",
+										"required": true
 									},
 									"working_directory": {
 										"type": "string",
@@ -75,11 +77,13 @@
 											"properties": {
 												"variable": {
 													"type": "string",
-													"description": "The variable name."
+													"description": "The variable name.",
+													"required": true
 												},
 												"question": {
 													"type": "string",
-													"description": "The question to ask the user."
+													"description": "The question to ask the user.",
+													"required": true
 												},
 												"default": {
 													"type": "string",
